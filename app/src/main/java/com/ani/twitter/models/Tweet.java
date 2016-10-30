@@ -17,6 +17,8 @@ public class Tweet {
     private User user;
     @Nullable
     private Entity entity;
+    private int retweetCount;
+    private int favoriteCount;
 
     public String getText() {
         return text;
@@ -39,6 +41,14 @@ public class Tweet {
         return entity;
     }
 
+    public int getRetweetCount() {
+        return retweetCount;
+    }
+
+    public int getFavoriteCount() {
+        return favoriteCount;
+    }
+
     public static Tweet fromJSON(JSONObject object) {
         Tweet tweet = new Tweet();
         try {
@@ -49,6 +59,9 @@ public class Tweet {
 
             JSONObject entities = object.optJSONObject("entities");
             tweet.entity = entities == null ? null : Entity.fromJSON(entities);
+
+            tweet.retweetCount = object.getInt("retweet_count");
+            tweet.favoriteCount = object.getInt("favorite_count");
         } catch (JSONException e) {
             e.printStackTrace();
         }

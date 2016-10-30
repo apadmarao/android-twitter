@@ -5,6 +5,9 @@
     <string name="login_label">Connect to Twitter</string>
 
     <string name="handle">\@%1$s</string>
+    <string name="number">%1$d</string>
+
     <string name="compose_hint">What\'s happening?</string>
     <string name="tweet">Tweet</string>
+    <string name="cancel">Cancel</string>
 </resources>

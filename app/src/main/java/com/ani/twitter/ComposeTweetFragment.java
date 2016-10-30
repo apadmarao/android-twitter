@@ -23,6 +23,7 @@ public class ComposeTweetFragment extends DialogFragment {
 
     private EditText etTweet;
     private Button btnTweet;
+    private Button btnCancel;
 
     public ComposeTweetFragment() {
         // Empty constructor is required for DialogFragment
@@ -48,6 +49,7 @@ public class ComposeTweetFragment extends DialogFragment {
         client = TwitterApplication.getRestClient();
         etTweet = (EditText) view.findViewById(R.id.etTweet);
         btnTweet = (Button) view.findViewById(R.id.btnTweet);
+        btnCancel = (Button) view.findViewById(R.id.btnCancel);
 
         getDialog().setTitle("Hello world");
         // Show soft keyboard automatically and request focus to field
@@ -74,6 +76,13 @@ public class ComposeTweetFragment extends DialogFragment {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
                     }
                 });
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
             }
         });
     }

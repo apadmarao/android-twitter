@@ -24,7 +24,7 @@
         android:id="@+id/rvTweets"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:src="@drawable/ic_add_black_24dp"
+        android:src="@drawable/ic_add_white_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

@@ -47,11 +47,11 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewH
 
     @Override
     public void onBindViewHolder(TweetViewHolder holder, int position) {
+        Resources res = getContext().getResources();
         Tweet tweet = tweets.get(position);
 
         holder.tvName.setText(tweet.getUser().getName());
 
-        Resources res = getContext().getResources();
         String text = String.format(res.getString(R.string.handle), tweet.getUser().getScreenName());
         holder.tvScreenName.setText(text);
 
@@ -69,6 +69,11 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewH
         } else {
             holder.ivMedia.setVisibility(View.GONE);
         }
+
+        holder.tvRetweetCount.setText(String.format(res.getString(R.string.number),
+                tweet.getRetweetCount()));
+        holder.tvFavoriteCount.setText(String.format(res.getString(R.string.number),
+                tweet.getFavoriteCount()));
     }
 
     @Override
@@ -113,6 +118,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewH
         private TextView tvTweet;
         private TextView tvTime;
         private ImageView ivMedia;
+        private TextView tvRetweetCount;
+        private TextView tvFavoriteCount;
 
         TweetViewHolder(View itemView) {
             super(itemView);
@@ -123,6 +130,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewH
             tvTweet = (TextView) itemView.findViewById(R.id.tvTweet);
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
             ivMedia = (ImageView) itemView.findViewById(R.id.ivMedia);
+            tvRetweetCount = (TextView) itemView.findViewById(R.id.tvRetweetCount);
+            tvFavoriteCount = (TextView) itemView.findViewById(R.id.tvFavoriteCount);
         }
     }
 }
