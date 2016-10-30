@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.ani.twitter"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 25
     }
 
     // Related to https://github.com/scribejava/scribejava/issues/480
@@ -36,7 +36,7 @@ def dbflow_version = "3.1.1"
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.codepath.libraries:android-oauth-handler:1.1.0'
-    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:appcompat-v7:25.0.0'
     // Picasso for remote image loading
     compile 'com.squareup.picasso:picasso:2.5.2'
     // Android Async Http for sending async network requests
@@ -46,5 +46,6 @@ dependencies {
     compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
 
-    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:recyclerview-v7:25.0.0'
+    compile 'com.android.support:design:25.0.0'
 }

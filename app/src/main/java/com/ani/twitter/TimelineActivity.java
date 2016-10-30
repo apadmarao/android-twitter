@@ -2,9 +2,11 @@ package com.ani.twitter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.ani.twitter.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -13,11 +15,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity
+        implements ComposeTweetFragment.ComposeTweetFragmentListener {
 
     private TwitterClient client;
     private List<Tweet> tweets;
@@ -73,5 +77,19 @@ public class TimelineActivity extends AppCompatActivity {
 
     private Long oldestTweetId() {
         return tweets.isEmpty() ? null : tweets.get(tweets.size() - 1).getId();
+    }
+
+    public void onTweet(View view) {
+        FragmentManager fm = getSupportFragmentManager();
+        ComposeTweetFragment composeTweetFragment = ComposeTweetFragment.newInstance();
+        composeTweetFragment.show(fm, "fragment_edit_name");
+    }
+
+    @Override
+    public void onTweet(Tweet tweet) {
+        Collections.reverse(tweets);
+        tweets.add(tweet);
+        Collections.reverse(tweets);
+        tweetsAdapter.notifyDataSetChanged();
     }
 }
