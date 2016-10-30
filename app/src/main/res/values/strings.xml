@@ -4,7 +4,7 @@
     <string name="app_name">Tweet tweet</string>
     <string name="login_label">Connect to Twitter</string>
 
+    <string name="handle">\@%1$s</string>
     <string name="compose_hint">What\'s happening?</string>
     <string name="tweet">Tweet</string>
-
 </resources>

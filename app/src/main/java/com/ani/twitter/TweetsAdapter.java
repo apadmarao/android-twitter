@@ -1,6 +1,8 @@
 package com.ani.twitter;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -9,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ani.twitter.models.Entity;
+import com.ani.twitter.models.Media;
 import com.ani.twitter.models.Tweet;
 import com.squareup.picasso.Picasso;
 
@@ -45,13 +49,26 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewH
     public void onBindViewHolder(TweetViewHolder holder, int position) {
         Tweet tweet = tweets.get(position);
 
-        holder.tvScreenName.setText(tweet.getUser().getScreenName());
+        holder.tvName.setText(tweet.getUser().getName());
+
+        Resources res = getContext().getResources();
+        String text = String.format(res.getString(R.string.handle), tweet.getUser().getScreenName());
+        holder.tvScreenName.setText(text);
+
         holder.tvTweet.setText(tweet.getText());
         holder.tvTime.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
 
         holder.ivProfile.setImageResource(android.R.color.transparent);
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(holder.ivProfile);
 
+        holder.ivMedia.setImageResource(android.R.color.transparent);
+        String mediaUrl = mediaUrl(tweet);
+        if (mediaUrl != null) {
+            Picasso.with(getContext()).load(mediaUrl).into(holder.ivMedia);
+            holder.ivMedia.setVisibility(View.VISIBLE);
+        } else {
+            holder.ivMedia.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -76,19 +93,36 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewH
         return relativeDate;
     }
 
+    @Nullable
+    private static String mediaUrl(Tweet tweet) {
+        Entity entity = tweet.getEntity();
+        if (entity != null) {
+            List<Media> media = entity.getMedia();
+            if (!media.isEmpty()) {
+                return media.get(0).getMediaUrl();
+            }
+        }
+
+        return null;
+    }
+
     static class TweetViewHolder extends RecyclerView.ViewHolder {
         private ImageView ivProfile;
+        private TextView tvName;
         private TextView tvScreenName;
         private TextView tvTweet;
         private TextView tvTime;
+        private ImageView ivMedia;
 
-        public TweetViewHolder(View itemView) {
+        TweetViewHolder(View itemView) {
             super(itemView);
 
             ivProfile = (ImageView) itemView.findViewById(R.id.ivProfile);
+            tvName = (TextView) itemView.findViewById(R.id.tvName);
             tvScreenName = (TextView) itemView.findViewById(R.id.tvScreenName);
             tvTweet = (TextView) itemView.findViewById(R.id.tvTweet);
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
+            ivMedia = (ImageView) itemView.findViewById(R.id.ivMedia);
         }
     }
 }

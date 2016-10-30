@@ -13,22 +13,43 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvScreenName"
+        android:textStyle="bold"
+        android:id="@+id/tvName"
         android:layout_toRightOf="@id/ivProfile"
         android:layout_toEndOf="@id/ivProfile"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/tvScreenName"
+        android:layout_toRightOf="@id/tvName"
+        android:layout_toEndOf="@id/tvName"
+        android:layout_alignBaseline="@+id/tvName"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/tvTime"
-        android:layout_alignBaseline="@id/tvScreenName"
-        android:layout_toRightOf="@id/tvScreenName"/>
+        android:layout_alignBaseline="@id/tvName"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvTweet"
+        android:autoLink="all"
         android:layout_toRightOf="@id/ivProfile"
         android:layout_toEndOf="@id/ivProfile"
         android:layout_below="@id/tvScreenName"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:id="@+id/ivMedia"
+        android:layout_toRightOf="@id/ivProfile"
+        android:layout_toEndOf="@id/ivProfile"
+        android:layout_below="@id/tvTweet"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
 </RelativeLayout>
