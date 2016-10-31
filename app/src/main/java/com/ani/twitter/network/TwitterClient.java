@@ -40,7 +40,9 @@ public class TwitterClient extends OAuthBaseClient {
 		params.put("count", 25);
 		params.put("since_id", 1);
 		if (maxId != null) {
-			params.put("max_id", maxId);
+			// max id is the inclusive oldest tweet
+			// subtract one to avoid dups
+			params.put("max_id", maxId - 1);
 		}
 
 		client.get(apiUrl, params, handler);
