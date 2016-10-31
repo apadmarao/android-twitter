@@ -3,6 +3,7 @@ package com.ani.twitter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +31,7 @@ public class TimelineActivity extends AppCompatActivity
     private TweetsAdapter tweetsAdapter;
     private RecyclerView rvTweets;
     private EndlessRecyclerViewScrollListener scrollListener;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,9 @@ public class TimelineActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         client = TwitterApplication.getRestClient();
+
         tweets = new ArrayList<>();
         tweetsAdapter = new TweetsAdapter(this, tweets);
         rvTweets.setAdapter(tweetsAdapter);
@@ -56,6 +60,14 @@ public class TimelineActivity extends AppCompatActivity
             }
         };
         rvTweets.addOnScrollListener(scrollListener);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                populateTimeline(null);
+            }
+        });
+
 
         populateTimeline(null);
     }
@@ -76,6 +88,9 @@ public class TimelineActivity extends AppCompatActivity
                 if (maxId == null) {
                     tweets.clear();
                     scrollListener.resetState();
+                    if (swipeContainer.isRefreshing()) {
+                        swipeContainer.setRefreshing(false);
+                    }
                 }
                 tweets.addAll(Tweet.fromJSONArray(response));
                 tweetsAdapter.notifyDataSetChanged();
