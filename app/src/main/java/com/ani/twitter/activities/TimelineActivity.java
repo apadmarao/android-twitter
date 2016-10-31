@@ -13,14 +13,14 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
-import com.ani.twitter.fragments.ComposeTweetFragment;
-import com.ani.twitter.utils.EndlessRecyclerViewScrollListener;
 import com.ani.twitter.R;
-import com.ani.twitter.adapters.TweetsAdapter;
 import com.ani.twitter.TwitterApplication;
-import com.ani.twitter.network.TwitterClient;
+import com.ani.twitter.adapters.TweetsAdapter;
+import com.ani.twitter.fragments.ComposeTweetFragment;
 import com.ani.twitter.models.Tweet;
 import com.ani.twitter.models.Tweet_Table;
+import com.ani.twitter.network.TwitterClient;
+import com.ani.twitter.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -117,6 +117,7 @@ public class TimelineActivity extends AppCompatActivity
         });
     }
 
+    @Nullable
     private Long oldestTweetId() {
         return tweets.isEmpty() ? null : tweets.get(tweets.size() - 1).getId();
     }
@@ -129,10 +130,7 @@ public class TimelineActivity extends AppCompatActivity
 
     @Override
     public void onTweet(Tweet tweet) {
-        Collections.reverse(tweets);
-        tweets.add(tweet);
-        Collections.reverse(tweets);
-        tweetsAdapter.notifyDataSetChanged();
+        new SaveTweetsDb(false, true).execute(tweet);
     }
 
     private class LoadTweetsDb extends AsyncTask<Void, Void, List<Tweet>> {
@@ -150,10 +148,19 @@ public class TimelineActivity extends AppCompatActivity
     }
 
     private class SaveTweetsDb extends AsyncTask<Tweet, Void, List<Tweet>> {
-        private boolean isRefresh;
+        // whether this is a refresh, used to reset state in memory and db and ui
+        private final boolean isRefresh;
+        // whether to add the tweets returned by the background task to the head or tail
+        private final boolean addToHead;
 
         private SaveTweetsDb(boolean isRefresh) {
             this.isRefresh = isRefresh;
+            addToHead = false;
+        }
+
+        private SaveTweetsDb(boolean isRefresh, boolean addToHead) {
+            this.isRefresh = isRefresh;
+            this.addToHead = addToHead;
         }
 
         protected List<Tweet> doInBackground(Tweet... tweets) {
@@ -177,7 +184,14 @@ public class TimelineActivity extends AppCompatActivity
                 tweets.clear();
                 scrollListener.resetState();
             }
-            tweets.addAll(result);
+            if (addToHead) {
+                Collections.reverse(tweets);
+                Collections.reverse(result);
+                tweets.addAll(result);
+                Collections.reverse(tweets);
+            } else {
+                tweets.addAll(result);
+            }
             tweetsAdapter.notifyDataSetChanged();
         }
     }
