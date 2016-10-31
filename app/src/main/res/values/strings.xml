@@ -2,6 +2,9 @@
 <resources>
 
     <string name="app_name">Tweet tweet</string>
+
+    <string name="welcome">Welcome to Twitter</string>
+    <string name="intro">See what\'s happening in the world right now</string>
     <string name="login_label">Connect to Twitter</string>
 
     <string name="handle">\@%1$s</string>
