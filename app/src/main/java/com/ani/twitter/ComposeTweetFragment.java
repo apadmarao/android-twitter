@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ani.twitter.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -20,8 +21,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
-
-import static com.ani.twitter.R.string.tweet;
 
 public class ComposeTweetFragment extends DialogFragment {
 
@@ -36,8 +35,6 @@ public class ComposeTweetFragment extends DialogFragment {
 
     public ComposeTweetFragment() {
         // Empty constructor is required for DialogFragment
-        // Make sure not to add arguments to the constructor
-        // Use `newInstance` instead as shown below
     }
 
     public static ComposeTweetFragment newInstance() {
@@ -86,6 +83,11 @@ public class ComposeTweetFragment extends DialogFragment {
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!client.isNetworkAvailable() || !client.isOnline()) {
+                    Toast.makeText(getContext(), "Can't connect right now", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 client.tweet(etTweet.getText().toString(), new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

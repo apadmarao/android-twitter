@@ -2,6 +2,13 @@ package com.ani.twitter.models;
 
 import android.support.annotation.Nullable;
 
+import com.ani.twitter.TwitterDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,15 +16,31 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tweet {
+@Table(database = TwitterDatabase.class)
+public class Tweet extends BaseModel {
 
+    @Column
     private String text;
+
+    @Column
+    @PrimaryKey
     private long id;
+
+    @Column
     private String createdAt;
+
+    @Column
+    @ForeignKey(saveForeignKeyModel = true)
     private User user;
+
+    // FIXME : should use entity
     @Nullable
     private Entity entity;
+
+    @Column
     private int retweetCount;
+
+    @Column
     private int favoriteCount;
 
     public String getText() {
@@ -47,6 +70,34 @@ public class Tweet {
 
     public int getFavoriteCount() {
         return favoriteCount;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setEntity(@Nullable Entity entity) {
+        this.entity = entity;
+    }
+
+    public void setRetweetCount(int retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    public void setFavoriteCount(int favoriteCount) {
+        this.favoriteCount = favoriteCount;
     }
 
     public static Tweet fromJSON(JSONObject object) {

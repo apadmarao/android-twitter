@@ -1,5 +1,6 @@
 package com.ani.twitter;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -10,14 +11,18 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ani.twitter.models.Tweet;
+import com.ani.twitter.models.Tweet_Table;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -68,7 +73,6 @@ public class TimelineActivity extends AppCompatActivity
             }
         });
 
-
         populateTimeline(null);
     }
 
@@ -81,24 +85,28 @@ public class TimelineActivity extends AppCompatActivity
     }
 
     private void populateTimeline(@Nullable final Long maxId) {
+        if (!client.isNetworkAvailable() || !client.isOnline()) {
+            Toast.makeText(this, "Can't connect right now", Toast.LENGTH_LONG).show();
+            swipeContainer.setRefreshing(false);
+            if (tweets.isEmpty()) {
+                new LoadTweetsDb().execute();
+            }
+            return;
+        }
+
         client.getHomeTimeline(maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                // new search
-                if (maxId == null) {
-                    tweets.clear();
-                    scrollListener.resetState();
-                    if (swipeContainer.isRefreshing()) {
-                        swipeContainer.setRefreshing(false);
-                    }
-                }
-                tweets.addAll(Tweet.fromJSONArray(response));
-                tweetsAdapter.notifyDataSetChanged();
+                List<Tweet> tweets = Tweet.fromJSONArray(response);
+                Tweet[] tweetsArr = new Tweet[tweets.size()];
+                tweetsArr = tweets.toArray(tweetsArr);
+                new SaveTweetsDb(maxId == null).execute(tweetsArr);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
+                swipeContainer.setRefreshing(false);
+                Toast.makeText(TimelineActivity.this, "Error loading from network", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -119,5 +127,52 @@ public class TimelineActivity extends AppCompatActivity
         tweets.add(tweet);
         Collections.reverse(tweets);
         tweetsAdapter.notifyDataSetChanged();
+    }
+
+    private class LoadTweetsDb extends AsyncTask<Void, Void, List<Tweet>> {
+        protected List<Tweet> doInBackground(Void... strings) {
+            return SQLite.select().from(Tweet.class)
+                    .orderBy(Tweet_Table.id, false).queryList();
+        }
+
+        protected void onPostExecute(List<Tweet> result) {
+            // This method is executed in the UIThread
+            tweets.clear();
+            tweets.addAll(result);
+            tweetsAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private class SaveTweetsDb extends AsyncTask<Tweet, Void, List<Tweet>> {
+        private boolean isRefresh;
+
+        private SaveTweetsDb(boolean isRefresh) {
+            this.isRefresh = isRefresh;
+        }
+
+        protected List<Tweet> doInBackground(Tweet... tweets) {
+            // If this is a refresh, clear old tweets from db
+            if (isRefresh) {
+                SQLite.delete(Tweet.class).execute();
+            }
+            for (Tweet tweet : tweets) {
+                tweet.save();
+            }
+
+            return Arrays.asList(tweets);
+        }
+
+        protected void onPostExecute(List<Tweet> result) {
+            // This method is executed in the UIThread
+
+            swipeContainer.setRefreshing(false);
+            // If this is a refresh, clear old tweets from memory and reset scroll
+            if (isRefresh) {
+                tweets.clear();
+                scrollListener.resetState();
+            }
+            tweets.addAll(result);
+            tweetsAdapter.notifyDataSetChanged();
+        }
     }
 }
