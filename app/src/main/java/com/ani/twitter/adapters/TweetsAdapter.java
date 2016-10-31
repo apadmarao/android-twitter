@@ -22,6 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
+
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewHolder> {
 
     private List<Tweet> tweets;
@@ -60,7 +62,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewH
         holder.tvTime.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
 
         holder.ivProfile.setImageResource(android.R.color.transparent);
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(holder.ivProfile);
+        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl())
+                .transform(new RoundedCornersTransformation(2, 2)).into(holder.ivProfile);
 
         holder.ivMedia.setImageResource(android.R.color.transparent);
         String mediaUrl = mediaUrl(tweet);
