@@ -1,5 +1,6 @@
 package com.ani.twitter;
 
+import com.ani.twitter.network.TwitterClient;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowLog;
 import com.raizlabs.android.dbflow.config.FlowManager;

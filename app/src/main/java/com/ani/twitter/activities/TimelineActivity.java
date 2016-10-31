@@ -1,4 +1,4 @@
-package com.ani.twitter;
+package com.ani.twitter.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +13,12 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
+import com.ani.twitter.fragments.ComposeTweetFragment;
+import com.ani.twitter.utils.EndlessRecyclerViewScrollListener;
+import com.ani.twitter.R;
+import com.ani.twitter.adapters.TweetsAdapter;
+import com.ani.twitter.TwitterApplication;
+import com.ani.twitter.network.TwitterClient;
 import com.ani.twitter.models.Tweet;
 import com.ani.twitter.models.Tweet_Table;
 import com.loopj.android.http.JsonHttpResponseHandler;

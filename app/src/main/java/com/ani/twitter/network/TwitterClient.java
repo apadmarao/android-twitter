@@ -1,4 +1,4 @@
-package com.ani.twitter;
+package com.ani.twitter.network;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -21,10 +21,6 @@ import java.io.IOException;
  * See a full list of supported API classes: 
  *   https://github.com/fernandezpablo85/scribe-java/tree/master/src/main/java/org/scribe/builder/api
  * Key and Secret are provided by the developer site for the given API i.e dev.twitter.com
- * Add methods for each relevant endpoint in the API.
- * 
- * NOTE: You may want to rename this object based on the service i.e TwitterClient or FlickrClient
- * 
  */
 public class TwitterClient extends OAuthBaseClient {
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class; // Change this

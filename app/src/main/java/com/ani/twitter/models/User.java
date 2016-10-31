@@ -1,6 +1,6 @@
 package com.ani.twitter.models;
 
-import com.ani.twitter.TwitterDatabase;
+import com.ani.twitter.database.TwitterDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;

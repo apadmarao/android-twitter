@@ -1,4 +1,4 @@
-package com.ani.twitter;
+package com.ani.twitter.utils;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;

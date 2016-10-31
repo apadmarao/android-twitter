@@ -6,7 +6,7 @@
     android:id="@+id/activity_timeline"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ani.twitter.TimelineActivity">
+    tools:context="com.ani.twitter.activities.TimelineActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -54,6 +54,6 @@
         android:layout_margin="16dp"
         app:layout_anchor="@id/rvTweets"
         app:layout_anchorGravity="bottom|end"
-        app:layout_behavior="com.ani.twitter.ScrollAwareFABBehavior"
+        app:layout_behavior="com.ani.twitter.utils.ScrollAwareFABBehavior"
         android:onClick="onTweet"/>
 </android.support.design.widget.CoordinatorLayout>

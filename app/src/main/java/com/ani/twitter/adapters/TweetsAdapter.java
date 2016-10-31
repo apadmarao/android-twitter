@@ -1,4 +1,4 @@
-package com.ani.twitter;
+package com.ani.twitter.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ani.twitter.R;
 import com.ani.twitter.models.Entity;
 import com.ani.twitter.models.Media;
 import com.ani.twitter.models.Tweet;

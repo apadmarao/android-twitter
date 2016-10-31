@@ -1,4 +1,4 @@
-package com.ani.twitter;
+package com.ani.twitter.utils;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;

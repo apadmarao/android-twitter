@@ -1,4 +1,4 @@
-package com.ani.twitter;
+package com.ani.twitter.database;
 
 import com.raizlabs.android.dbflow.annotation.Database;
 

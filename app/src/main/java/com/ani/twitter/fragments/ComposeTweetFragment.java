@@ -1,4 +1,4 @@
-package com.ani.twitter;
+package com.ani.twitter.fragments;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ani.twitter.R;
+import com.ani.twitter.TwitterApplication;
+import com.ani.twitter.network.TwitterClient;
 import com.ani.twitter.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
