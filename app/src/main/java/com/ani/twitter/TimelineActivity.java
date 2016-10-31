@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 
 import com.ani.twitter.models.Tweet;
@@ -34,6 +36,9 @@ public class TimelineActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
         client = TwitterApplication.getRestClient();
         tweets = new ArrayList<>();
@@ -53,6 +58,14 @@ public class TimelineActivity extends AppCompatActivity
         rvTweets.addOnScrollListener(scrollListener);
 
         populateTimeline(null);
+    }
+
+    // Menu icons are inflated just as they were with actionbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.login, menu);
+        return true;
     }
 
     private void populateTimeline(@Nullable final Long maxId) {
