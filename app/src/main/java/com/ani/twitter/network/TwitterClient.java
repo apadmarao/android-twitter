@@ -25,8 +25,8 @@ import java.io.IOException;
 public class TwitterClient extends OAuthBaseClient {
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class; // Change this
 	public static final String REST_URL = "https://api.twitter.com/1.1";
-	public static final String REST_CONSUMER_KEY = "wCsnHht5FuyQ6WvvL16tf2dVF";
-	public static final String REST_CONSUMER_SECRET = "gILFqMC3mCBYDTdDBdO1ermMlb2ea6iwwbPiZ4Mr1w30ASe56v";
+	public static final String REST_CONSUMER_KEY = "bFgqFtVyue71qymFKZvxeLMZa";
+	public static final String REST_CONSUMER_SECRET = "bxms8BinKmoIl2scFuSBAXLxfvrZQifsuYIGvgoKO1jkk5xUBK";
 	public static final String REST_CALLBACK_URL = "oauth://tweettweet"; // Change this (here and in manifest)
 
 	public TwitterClient(Context context) {
