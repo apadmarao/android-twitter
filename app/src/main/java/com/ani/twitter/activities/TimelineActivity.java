@@ -2,11 +2,13 @@ package com.ani.twitter.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +24,8 @@ import com.ani.twitter.fragments.MentionsTimelineFragment;
 public class TimelineActivity extends AppCompatActivity {
 //        implements ComposeTweetFragment.ComposeTweetFragmentListener {
 
+    private TabLayout tabLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,21 +38,21 @@ public class TimelineActivity extends AppCompatActivity {
         viewPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(),
                 TimelineActivity.this));
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.slidingTabs);
+        tabLayout = (TabLayout) findViewById(R.id.slidingTabs);
         tabLayout.setupWithViewPager(viewPager);
+        setupTabLayoutIcons();
+        tabLayout.addOnTabSelectedListener(new OnTabSelectedListener(TimelineActivity.this, viewPager));
     }
 
     // Menu icons are inflated just as they were with actionbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.login, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
 
@@ -74,7 +78,7 @@ public class TimelineActivity extends AppCompatActivity {
         private String tabTitles[] = new String[] { "Home", "Mentions" };
         private Context context;
 
-        public TweetsPagerAdapter(FragmentManager fm, Context context) {
+        private TweetsPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
             this.context = context;
         }
@@ -92,10 +96,59 @@ public class TimelineActivity extends AppCompatActivity {
                 return new MentionsTimelineFragment();
             }
         }
+    }
+
+    private static class OnTabSelectedListener extends TabLayout.ViewPagerOnTabSelectedListener {
+
+        private final Context context;
+
+        private OnTabSelectedListener(Context context, ViewPager viewPager) {
+            super(viewPager);
+            this.context = context;
+        }
 
         @Override
-        public CharSequence getPageTitle(int position) {
-            return tabTitles[position];
+        public void onTabSelected(TabLayout.Tab tab) {
+            super.onTabSelected(tab);
+            int tabIconColor = ContextCompat.getColor(context, R.color.colorAccent);
+            tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab) {
+            super.onTabUnselected(tab);
+            int tabIconColor = ContextCompat.getColor(context, R.color.darkGray);
+            tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+            super.onTabReselected(tab);
+        }
+    }
+
+    private void setupTabLayoutIcons() {
+        for (int index = 0; index < tabLayout.getTabCount(); ++index) {
+            TabLayout.Tab tab = tabLayout.getTabAt(index);
+            if (tab == null) {
+                return;
+            }
+
+            // setup icon
+            if (index == 0) {
+                tab.setIcon(R.drawable.ic_home_black_24dp);
+            } else {
+                tab.setIcon(R.drawable.ic_notifications_active_black_24dp);
+            }
+
+            // setup icon color
+            final int tabIconColor;
+            if (tab.isSelected()) {
+                tabIconColor = ContextCompat.getColor(TimelineActivity.this, R.color.colorAccent);
+            } else {
+                tabIconColor = ContextCompat.getColor(TimelineActivity.this, R.color.darkGray);
+            }
+            tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
         }
     }
 }
