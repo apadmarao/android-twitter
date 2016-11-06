@@ -91,7 +91,7 @@ abstract public class TweetsListFragment extends Fragment {
         populateTimeline(null);
     }
 
-    void populateTimeline(@Nullable final Long maxId) {
+    private void populateTimeline(@Nullable final Long maxId) {
         if (!client.isNetworkAvailable() || !client.isOnline()) {
             Toast.makeText(getActivity(), "Can't connect right now", Toast.LENGTH_LONG).show();
             swipeContainer.setRefreshing(false);

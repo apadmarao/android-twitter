@@ -25,6 +25,15 @@ public class User extends BaseModel {
     @Column
     private String profileImageUrl;
 
+    @Column
+    private String tagline;
+
+    @Column
+    private int followersCount;
+
+    @Column
+    private int followingCount;
+
     public String getName() {
         return name;
     }
@@ -39,6 +48,18 @@ public class User extends BaseModel {
 
     public String getProfileImageUrl() {
         return profileImageUrl;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    public int getFollowingCount() {
+        return followingCount;
     }
 
     public void setName(String name) {
@@ -57,6 +78,18 @@ public class User extends BaseModel {
         this.profileImageUrl = profileImageUrl;
     }
 
+    public void setTagline(String tagline) {
+        this.tagline = tagline;
+    }
+
+    public void setFollowersCount(int followersCount) {
+        this.followersCount = followersCount;
+    }
+
+    public void setFollowingCount(int followingCount) {
+        this.followingCount = followingCount;
+    }
+
     public static User fromJSON(JSONObject object) {
         User user = new User();
         try {
@@ -64,6 +97,9 @@ public class User extends BaseModel {
             user.id = object.getLong("id");
             user.screenName = object.getString("screen_name");
             user.profileImageUrl = object.getString("profile_image_url");
+            user.tagline = object.getString("description");
+            user.followersCount = object.getInt("followers_count");
+            user.followingCount = object.getInt("friends_count");
         } catch (JSONException e) {
             e.printStackTrace();
         }
