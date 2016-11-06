@@ -23,11 +23,11 @@ import java.io.IOException;
  * Key and Secret are provided by the developer site for the given API i.e dev.twitter.com
  */
 public class TwitterClient extends OAuthBaseClient {
-	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class; // Change this
-	public static final String REST_URL = "https://api.twitter.com/1.1";
-	public static final String REST_CONSUMER_KEY = "bFgqFtVyue71qymFKZvxeLMZa";
-	public static final String REST_CONSUMER_SECRET = "bxms8BinKmoIl2scFuSBAXLxfvrZQifsuYIGvgoKO1jkk5xUBK";
-	public static final String REST_CALLBACK_URL = "oauth://tweettweet"; // Change this (here and in manifest)
+	private static final Class<? extends Api> REST_API_CLASS = TwitterApi.class;
+	private static final String REST_URL = "https://api.twitter.com/1.1";
+	private static final String REST_CONSUMER_KEY = "bFgqFtVyue71qymFKZvxeLMZa";
+	private static final String REST_CONSUMER_SECRET = "bxms8BinKmoIl2scFuSBAXLxfvrZQifsuYIGvgoKO1jkk5xUBK";
+	private static final String REST_CALLBACK_URL = "oauth://tweettweet";
 
 	public TwitterClient(Context context) {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
@@ -39,6 +39,20 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
 		params.put("since_id", 1);
+		if (maxId != null) {
+			// max id is the inclusive oldest tweet
+			// subtract one to avoid dups
+			params.put("max_id", maxId - 1);
+		}
+
+		client.get(apiUrl, params, handler);
+	}
+
+	public void getMentionsTimeline(@Nullable Long maxId, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+
+		RequestParams params = new RequestParams();
+		params.put("count", 25);
 		if (maxId != null) {
 			// max id is the inclusive oldest tweet
 			// subtract one to avoid dups
@@ -70,8 +84,9 @@ public class TwitterClient extends OAuthBaseClient {
 			Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
 			int     exitValue = ipProcess.waitFor();
 			return (exitValue == 0);
-		} catch (IOException e)          { e.printStackTrace(); }
-		catch (InterruptedException e) { e.printStackTrace(); }
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 }
