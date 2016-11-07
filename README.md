@@ -1,8 +1,9 @@
-# Project 3 - *Tweet tweet*
+# Project 3-4 - *Tweet tweet*
 
 **Tweet tweet** is an android app that allows a user to view his Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
 Time spent: **10** hours spent in total for Project 4
+
 Time spent: **12** hours spent in total for Project 3
 
 ## Project 4 User Stories
@@ -94,6 +95,7 @@ The following **additional** features are implemented:
 Here's a walkthrough of implemented user stories:
 
 ![Walkthrough Project 4](walkthrough-project4.gif)
+
 ![Walkthrough Project 3](walkthrough-project3.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
