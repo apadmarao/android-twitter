@@ -13,4 +13,7 @@
     <string name="compose_hint">What\'s happening?</string>
     <string name="tweet">Tweet</string>
     <string name="cancel">Cancel</string>
+
+    <string name="following">&lt;b>%1$s&lt;/b> FOLLOWING</string>
+    <string name="followers">&lt;b>%1$s&lt;/b> FOLLOWERS</string>
 </resources>

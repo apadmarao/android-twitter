@@ -1,9 +1,11 @@
 package com.ani.twitter.activities;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,10 +19,9 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
-import cz.msebera.android.httpclient.Header;
-import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
+import java.text.NumberFormat;
 
-import static com.ani.twitter.R.id.tvProfileTagline;
+import cz.msebera.android.httpclient.Header;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -71,8 +72,8 @@ public class ProfileActivity extends AppCompatActivity {
         TextView tvProfileName = (TextView) findViewById(R.id.tvProfileName);
         TextView tvProfileScreenName = (TextView) findViewById(R.id.tvProfileScreenName);
         TextView tvProfileTagline = (TextView) findViewById(R.id.tvProfileTagline);
-//        TextView tvFollowers = (TextView) findViewById(R.id.tvFollowers);
-//        TextView tvFollowing = (TextView) findViewById(R.id.tvFollowing);
+        TextView tvFollowing = (TextView) findViewById(R.id.tvFollowing);
+        TextView tvFollowers = (TextView) findViewById(R.id.tvFollowers);
 
         if (user.getProfileBannerUrl() == null || user.getProfileBannerUrl().isEmpty()) {
             ivProfileImage.setBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -80,10 +81,21 @@ public class ProfileActivity extends AppCompatActivity {
             Picasso.with(this).load(user.getProfileBannerUrl()).into(ivProfileBannerImage);
         }
         Picasso.with(this).load(user.getProfileImageUrl()).into(ivProfileImage);
+
+        Resources res = getResources();
+
         tvProfileName.setText(user.getName());
-        tvProfileScreenName.setText("@" + user.getScreenName());
+        tvProfileScreenName.setText(String.format(res.getString(R.string.handle), user.getScreenName()));
         tvProfileTagline.setText(user.getTagline());
-//        tvFollowers.setText(Integer.toString(user.getFollowersCount()));
-//        tvFollowing.setText(Integer.toString(user.getFollowingCount()));
+
+        tvFollowing.setText(Html.fromHtml(String.format(res.getString(R.string.following),
+                formatCount(user.getFollowingCount()))));
+        tvFollowers.setText(Html.fromHtml(String.format(res.getString(R.string.followers),
+                formatCount(user.getFollowersCount()))));
+    }
+
+    private String formatCount(int count) {
+        return NumberFormat.getNumberInstance(getResources().getConfiguration().locale)
+                .format(count);
     }
 }
