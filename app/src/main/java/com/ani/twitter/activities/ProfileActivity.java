@@ -79,8 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             Picasso.with(this).load(user.getProfileBannerUrl()).into(ivProfileBannerImage);
         }
-        Picasso.with(this).load(user.getProfileImageUrl())
-                .transform(new RoundedCornersTransformation(2, 2)).into(ivProfileImage);
+        Picasso.with(this).load(user.getProfileImageUrl()).into(ivProfileImage);
         tvProfileName.setText(user.getName());
         tvProfileScreenName.setText("@" + user.getScreenName());
         tvProfileTagline.setText(user.getTagline());
