@@ -4,12 +4,14 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ani.twitter.R;
 import com.ani.twitter.TwitterApplication;
@@ -85,27 +87,30 @@ public class ProfileHeaderFragment extends Fragment {
     }
 
     private void populateHeader() {
-        // FIXME : Handle error
+        if (!client.isNetworkAvailable() || !client.isOnline()) {
+            Toast.makeText(getActivity(), "Can't connect right now", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         client.getUserInfo(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 user = User.fromJSON(response);
-                // getActivity().getSupportActionBar().setTitle("@" + user.getName());
                 populateHeaderWithUser(user);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable,
                     JSONObject errorResponse) {
-                // FIXME : Handle error
-                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Toast.makeText(getActivity(), "Error loading from network", Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
     private void populateHeaderWithUser(User user) {
+        ((AppCompatActivity) getActivity()).getSupportActionBar()
+                .setTitle("@" + user.getScreenName());
+
         if (user.getProfileBannerUrl() == null || user.getProfileBannerUrl().isEmpty()) {
             ivProfileImage.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         } else {

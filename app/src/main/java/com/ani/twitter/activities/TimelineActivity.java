@@ -69,7 +69,6 @@ public class TimelineActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-
     @Override
     public void onTweet(Tweet tweet) {
         ((ComposeTweetFragment.ComposeTweetFragmentListener) pagerAdapter.getRegisteredFragment(0))
