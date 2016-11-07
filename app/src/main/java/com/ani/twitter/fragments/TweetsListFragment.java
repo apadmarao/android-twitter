@@ -37,7 +37,8 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
 abstract public class TweetsListFragment extends Fragment
-        implements TweetsAdapter.OnUserClickListener {
+        implements TweetsAdapter.OnUserClickListener,
+        ComposeTweetFragment.ComposeTweetFragmentListener {
 
     TwitterClient client;
     private List<Tweet> tweets;
@@ -94,6 +95,11 @@ abstract public class TweetsListFragment extends Fragment
         });
 
         populateTimeline(null);
+    }
+
+    @Override
+    public void onTweet(Tweet tweet) {
+        new SaveTweetsDb(false, true).execute(tweet);
     }
 
     @Override

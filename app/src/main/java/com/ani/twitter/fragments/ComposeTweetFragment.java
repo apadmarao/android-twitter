@@ -17,8 +17,8 @@ import android.widget.Toast;
 
 import com.ani.twitter.R;
 import com.ani.twitter.TwitterApplication;
-import com.ani.twitter.network.TwitterClient;
 import com.ani.twitter.models.Tweet;
+import com.ani.twitter.network.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
@@ -69,12 +69,10 @@ public class ComposeTweetFragment extends DialogFragment {
         etTweet.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override

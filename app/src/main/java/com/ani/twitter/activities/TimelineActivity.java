@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -20,11 +19,15 @@ import com.ani.twitter.R;
 import com.ani.twitter.fragments.ComposeTweetFragment;
 import com.ani.twitter.fragments.HomeTimelineFragment;
 import com.ani.twitter.fragments.MentionsTimelineFragment;
+import com.ani.twitter.models.Tweet;
+import com.ani.twitter.utils.SmartFragmentStatePagerAdapter;
 
-public class TimelineActivity extends AppCompatActivity {
-//        implements ComposeTweetFragment.ComposeTweetFragmentListener {
+public class TimelineActivity extends AppCompatActivity
+        implements ComposeTweetFragment.ComposeTweetFragmentListener {
 
     private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private TweetsPagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +37,9 @@ public class TimelineActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        viewPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(),
-                TimelineActivity.this));
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        pagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager(), TimelineActivity.this);
+        viewPager.setAdapter(pagerAdapter);
 
         tabLayout = (TabLayout) findViewById(R.id.slidingTabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -44,7 +47,6 @@ public class TimelineActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new OnTabSelectedListener(TimelineActivity.this, viewPager));
     }
 
-    // Menu icons are inflated just as they were with actionbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.login, menu);
@@ -67,13 +69,14 @@ public class TimelineActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//
-//    @Override
-//    public void onTweet(Tweet tweet) {
-//        new SaveTweetsDb(false, true).execute(tweet);
-//    }
 
-    private static class TweetsPagerAdapter extends FragmentPagerAdapter {
+    @Override
+    public void onTweet(Tweet tweet) {
+        ((ComposeTweetFragment.ComposeTweetFragmentListener) pagerAdapter.getRegisteredFragment(0))
+                .onTweet(tweet);
+    }
+
+    private static class TweetsPagerAdapter extends SmartFragmentStatePagerAdapter {
 
         private Context context;
 
