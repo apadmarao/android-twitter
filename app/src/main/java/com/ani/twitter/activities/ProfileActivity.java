@@ -21,6 +21,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         User user = (User) getIntent().getSerializableExtra(USER_EXTRA);
         String screenName = user == null ? null : user.getScreenName();
