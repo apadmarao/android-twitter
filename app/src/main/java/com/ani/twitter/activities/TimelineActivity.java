@@ -75,7 +75,6 @@ public class TimelineActivity extends AppCompatActivity {
 
     private static class TweetsPagerAdapter extends FragmentPagerAdapter {
 
-        private String tabTitles[] = new String[] { "Home", "Mentions" };
         private Context context;
 
         private TweetsPagerAdapter(FragmentManager fm, Context context) {
@@ -85,7 +84,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return tabTitles.length;
+            return 2;
         }
 
         @Override

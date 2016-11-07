@@ -15,6 +15,7 @@ import com.ani.twitter.R;
 import com.ani.twitter.models.Entity;
 import com.ani.twitter.models.Media;
 import com.ani.twitter.models.Tweet;
+import com.ani.twitter.models.User;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -26,6 +27,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewHolder> {
 
+    private OnUserClickListener onUserClickListener;
     private List<Tweet> tweets;
     private Context context;
 
@@ -64,6 +66,14 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewH
         holder.ivProfile.setImageResource(android.R.color.transparent);
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl())
                 .transform(new RoundedCornersTransformation(2, 2)).into(holder.ivProfile);
+        holder.ivProfile.setTag(tweet.getUser());
+        holder.ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                User user = (User) view.getTag();
+                onUserClickListener.onUserClick(user);
+            }
+        });
 
         holder.ivMedia.setImageResource(android.R.color.transparent);
         String mediaUrl = mediaUrl(tweet);
@@ -83,6 +93,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewH
     @Override
     public int getItemCount() {
         return tweets.size();
+    }
+
+    public void setOnUserClickListener(OnUserClickListener onUserClickListener) {
+        this.onUserClickListener = onUserClickListener;
     }
 
     private static String getRelativeTimeAgo(String rawJsonDate) {
@@ -137,5 +151,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewH
             tvRetweetCount = (TextView) itemView.findViewById(R.id.tvRetweetCount);
             tvFavoriteCount = (TextView) itemView.findViewById(R.id.tvFavoriteCount);
         }
+    }
+
+    public interface OnUserClickListener {
+        void onUserClick(User user);
     }
 }

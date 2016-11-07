@@ -1,5 +1,6 @@
 package com.ani.twitter.fragments;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,9 +15,11 @@ import android.widget.Toast;
 
 import com.ani.twitter.R;
 import com.ani.twitter.TwitterApplication;
+import com.ani.twitter.activities.ProfileActivity;
 import com.ani.twitter.adapters.TweetsAdapter;
 import com.ani.twitter.models.Tweet;
 import com.ani.twitter.models.Tweet_Table;
+import com.ani.twitter.models.User;
 import com.ani.twitter.network.TwitterClient;
 import com.ani.twitter.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -33,7 +36,8 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-abstract public class TweetsListFragment extends Fragment {
+abstract public class TweetsListFragment extends Fragment
+        implements TweetsAdapter.OnUserClickListener {
 
     TwitterClient client;
     private List<Tweet> tweets;
@@ -50,6 +54,7 @@ abstract public class TweetsListFragment extends Fragment {
         client = TwitterApplication.getRestClient();
         tweets = new ArrayList<>();
         tweetsAdapter = new TweetsAdapter(getActivity(), tweets);
+        tweetsAdapter.setOnUserClickListener(this);
     }
 
     @Nullable
@@ -89,6 +94,13 @@ abstract public class TweetsListFragment extends Fragment {
         });
 
         populateTimeline(null);
+    }
+
+    @Override
+    public void onUserClick(User user) {
+        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+        intent.putExtra(ProfileActivity.USER_EXTRA, user);
+        startActivity(intent);
     }
 
     private void populateTimeline(@Nullable final Long maxId) {

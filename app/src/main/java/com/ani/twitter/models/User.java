@@ -1,5 +1,7 @@
 package com.ani.twitter.models;
 
+import android.support.annotation.Nullable;
+
 import com.ani.twitter.database.TwitterDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -9,8 +11,10 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 @Table(database = TwitterDatabase.class)
-public class User extends BaseModel {
+public class User extends BaseModel implements Serializable {
 
     @Column
     private String name;
@@ -24,6 +28,13 @@ public class User extends BaseModel {
 
     @Column
     private String profileImageUrl;
+
+    @Column
+    private String profileBackgroundImageUrl;
+
+    @Column
+    @Nullable
+    private String profileBannerUrl;
 
     @Column
     private String tagline;
@@ -48,6 +59,14 @@ public class User extends BaseModel {
 
     public String getProfileImageUrl() {
         return profileImageUrl;
+    }
+
+    public String getProfileBackgroundImageUrl() {
+        return profileBackgroundImageUrl;
+    }
+
+    public String getProfileBannerUrl() {
+        return profileBannerUrl;
     }
 
     public String getTagline() {
@@ -78,6 +97,14 @@ public class User extends BaseModel {
         this.profileImageUrl = profileImageUrl;
     }
 
+    public void setProfileBackgroundImageUrl(String profileBackgroundImageUrl) {
+        this.profileBackgroundImageUrl = profileBackgroundImageUrl;
+    }
+
+    public void setProfileBannerUrl(String profileBannerUrl) {
+        this.profileBannerUrl = profileBannerUrl;
+    }
+
     public void setTagline(String tagline) {
         this.tagline = tagline;
     }
@@ -97,6 +124,8 @@ public class User extends BaseModel {
             user.id = object.getLong("id");
             user.screenName = object.getString("screen_name");
             user.profileImageUrl = object.getString("profile_image_url");
+            user.profileBackgroundImageUrl = object.getString("profile_background_image_url");
+            user.profileBannerUrl = object.optString("profile_banner_url");
             user.tagline = object.getString("description");
             user.followersCount = object.getInt("followers_count");
             user.followingCount = object.getInt("friends_count");
